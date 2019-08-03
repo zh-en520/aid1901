@@ -1,0 +1,157 @@
+1.修改配置
+    1.构建Flask应用时指定配置信息
+        app = Flask(
+            __name__,
+            template_folder='指定模板文件夹的名称',
+            static_folder='指定静态文件夹的名称',
+            static_url_path='指定访问静态文件的路由'
+        )
+        示例：
+        app = Flask(
+            __name__,
+            template_folder='t',
+            static_folder='s',
+            static_url_path='/s'
+        )
+    2.启动程序时指定运行配置
+        app,run(
+            debug=True,
+            host="0.0.0.0",#整个局域网内都可以访问该网站
+            port=5000(默认)
+        )
+
+2.请求 - request
+    1.HTTP协议
+        1.作用
+        规范了数据是如何打包以及数据是如何传递的
+        HTTP:Hyper Text Transfer Protocol
+
+        2.两个核心内容
+            1.请求消息
+            　由浏览器带给服务端的消息
+            　共有3部分组成：
+                1.请求起始行
+                    GET / HTTP/1.1
+                    1.请求方式 - GET
+                    2.请求的资源路径 - /
+                    3.协议以及版本 - HTTP/1.1
+                2.请求消息头
+                    1.消息头都是以key:value格式存在
+                    2.每个消息头都是要传递给服务器的信息
+                3.请求主体
+                    只有 Post,Put 请求方式才有请求主体
+            2.响应消息
+                由服务器端要带给客户端的内容
+                1.响应起始行
+                    协议／版本　响应状态码　原因短句
+                    1.协议／版本：HTTP  /1.1
+                    2.响应状态码：
+                        2xx:
+                            200 ok;
+                        3xx:
+                            301 Moved Permanently(永久性重定向)
+                            302 Found(临时性重定向)
+                            304 Not Modified==200
+                        4xx:
+                            400 Bad Request(错误请求)
+                            403 Forbidden(禁止访问)
+                            404 Not Found(请求资源不存在)
+                            405 Method Not Allowed(请求方法不被允许)
+                        5xx:
+                            500 Internal Server Error(服务器内部错误)
+                            502 (网关错误)
+                2.响应消息头
+                    描述的是服务器端要响应给服务器的内容
+                    以key:value的形式存在的
+                3.响应主体
+                    服务器端所响应回来的内容
+
+    2.请求对象 - request
+        请求对象中会封装着与请求相关的所有的信息
+        如：请求数据，消息头...
+
+        2.语法
+        　from flask import request
+         在视图函数中可以通过request去获取对应的请求信息
+
+        3.request中的常用成员
+            1.scheme: 获取请求协议
+            2.method: 获取请求的方式 - GET / POST
+            3.args:   获取使用get请求方式所提交的数据
+            4.form:   获取使用post请求方式所提交的数据
+            5.cookies:获取cookies中的数据
+            6.files:  获取上传的文件们
+            7.path:   获取请求的资源路径（没有参数）
+            8.full_path:获取请求的资源的完整路径（有参数）
+            9.url:    获取完整的请求地址
+            10.headers:获取请求消息头的信息
+
+        4.获取请求提交的数据
+        向服务器端要数据的时候，用get方式；
+        用服务器处理数据时，用post
+        1.get方式
+            1.表单中method=get
+            2.通过地址栏访问的全部都是get
+                <a href="xxx?name=xiaoze&age=30">
+                window.location.href="/xxx?name=xxx&age=xx"
+
+            3.获取请求提交的数据
+            通过request.args获取请求的数据
+            (允许按照字典的方式操作request.args)
+            常用手段：
+                1.request.args['参数名']注意：取值之前先做判断
+                2.request.args.get('参数名','默认值')
+                3.request.args.getlist('参数名')
+                　　场合：能够实现多选的元素
+                    1.checkbox
+                    2.<select>
+
+        2.post方式
+            1.场合
+                <form method="post">
+            2.获取post的请求数据
+                通过request.form获取post的请求数据
+                （可以按照字典的方式操作request.form）
+                request.form['name']
+                request.form.get('name')
+                request.form.getlist('name')
+
+        作业：
+        完善Blog中的login和register页面
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

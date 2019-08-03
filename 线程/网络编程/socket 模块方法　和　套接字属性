@@ -1,0 +1,30 @@
+二．socket 模块方法　和　套接字属性
+
+　　１．部分socket模块方法
+　　　－gethostname()  获取计算机名
+　　　－gethostbyname('www.baidu.com')  获取主机ip地址
+　　　－getservbyname('mysql')  获取服务端口号
+　　　－getservbyport(3306)  获取端口对应服务
+
+　　２．套接字属性
+　　　－sockfd.type  套接字类型
+　　　－sockfd.family  套接字地址类型
+　　　　　示例：sock_attr.py
+　　　－sockfd.getsockname()  获取套接字绑定地址
+　　　－sockfd.fileno()  获取套接字的文件描述符
+
+　　　　　＊文件描述符：系统中每个ＩＯ操作都会分配一个整数编号，该整数即这个ＩＯ操作的文件描述符．
+　　　　　特点：文件描述符是系统用来区分处理ＩＯ的标志，每个ＩＯ不会重复．
+
+　　　－sockfd.getpeername()  获取连接套接字客户端地址
+　　　－sockfd.setsockopt(level,option,value)
+　　　　　－功能：设置套接字选项
+　　　　　－参数：level  选项类别（以IP_＼SOL_开头的选项，比如SOL_SOCKET）
+　　　　　　　　　option 具体选项(以IPV4/IPV4等开头的)
+　　　　　　　　　value  选项值
+
+　　　sockfd.getsockopt(level,option)
+　　　　　－功能：获取套接字选项值
+　　　　　－参数：level  选项类别
+　　　　　　　　　option  具体选项
+　　　　　－返回值：获取到的值

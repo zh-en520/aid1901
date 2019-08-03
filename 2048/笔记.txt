@@ -1,0 +1,202 @@
+
+
+
+thinter 图形用户接口
+    目标：能够独立完成一个单机应用程序
+        2048游戏
+gui(Graphical User Interface)
+    #以图形的形式与计算机程序进行交互
+    ＃控制台用户接口：
+        input()
+        print()
+
+    种类：
+    Qt(Linux/Windows/Mac OS)
+    MFC(Windows)
+    GTK(Linux)
+Python>GUI的种类：
+    tkinter(当前教学)
+    pyqt(逻辑复杂，迅速，运行效率极高)
+    wxpython
+
+tkinter 安装
+$ sudo apt install tk-dev
+$ sudo apt install python3-tk
+
+tkinter的官网
+    http://effbot.org/tkinterbook/tkinter-index.htm
+
+tkinter 包的导入
+    import tkinter
+    from thinter import xxx
+    from tkinter import *
+
+#让GUI程序启动和运行的步骤：
+    1.导入Tkinter模块
+    2.创建一个顶层的窗口对象，用于容纳整个GUI应用
+    3.在顶层窗口对象上(或其中)构建所有的GUI组件
+    4.通过底层的应用代码将这些GUI　组件链接起来
+    5.进入主事件循环(mainloop)
+第一个tkinter程序
+    示例见：．．．
+
+tkinter控件
+    Button 按钮
+    Label 标签
+    Entry 输入框
+    CheckButton 多选按钮
+    ．．．
+
+Label 控件
+    作用：
+        用于显示文字信息
+        用于显示图片信息
+    属性：
+        text    文字信息            字符串
+        bg      背景色(background)  字符串
+        fg      前景色(foreground)  str
+        width   宽度(字符个数为单位)  int
+        height  高度(行为单位)       int
+        font    字体                tuple
+        image   图片                PhotoImage
+
+tkinter 中的颜色表示方式：
+    几乎全部的表示颜色的字符串：
+    'red','green','blue','gray'...
+    十六进制RGB(Red,Green,Blue)三原色表示
+        '#FF0000' 红色(24位色)
+        '#00FF00' 绿色
+
+字体的表示元组：
+    ('字体族',字体大小,'字体样式')
+
+Button 控件
+    作用：
+        给计算机提供一个命令输入
+    属性：
+        text    文字
+        fg      前景色
+        bg      背景色
+        image   图片
+        bitmap  位图    'error','info'...
+        command 执行回调操作    函数
+
+Entry 控件
+    作用：
+        用于获取用户的文本输入
+    属性：
+        borderwidth     边框宽度    int
+Entry 控件的方法：
+    get()   获取文本框的内容    str
+
+窗口部件widget 的 config方法
+    作用：
+        用于修改widget控件的属性
+    语法：
+        xxx.config(属性１＝值１，属性２＝值２)
+    示例：
+        label = tkinter.Label(root)
+        label.config(text='hello')
+checkButton示例见：
+关联变量示例：checkbutton2.py
+
+
+事件event
+详见：event.py
+
+布局：
+    grip布局
+    pack
+    place
+事件：
+    鼠标动作
+    键盘动作
+    窗口缩放等
+关联变量：
+    IntVar
+    BooleanVar
+    StringVar
+    DoubleVar
+
+
+    -----------------------------------------------------day02
+scale控件
+    显示刻度
+radioButton　控件
+    多个数据元素单选其中一个
+    示例：
+    radiobutton.py
+
+labelFrame 控件
+    作用：
+        用于将多个widget分组管理
+    示例：labelframe.py
+
+SpinBox 控件
+    作用：
+        用来方便的获取数字信息
+    示例：spinbox.py
+
+text 控件
+    作用：
+        用来显示和输入多行文字信息
+    示例：text.py
+
+ComboBox 控件
+    作用：
+        选择输入其中一个
+    示例：conbobox.py
+
+Listbox 控件
+    作用：
+        多选多个选项
+    示例：listbox.py
+
+menu 菜单
+    作用：
+        用于向APP发送指定的命令
+    示例：menu.py
+
+2048游戏算法：
+    见：my2048.py
+
+定时器：
+    见：timer.py
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+一．UDP套接字编程
+　　１．服务端流程
+　　　－创建udp套接字
+　　　sockfd = socket(AF_INET,SOCK_DGRAM)
+
+
+　　　－绑定地址
+　　　sockfd.bind(addr)
+
+　
+　　　－消息收发
+　　　data,addr = sockfd.recvfrom(buffersize)
+　　　－功能：接收UDP消息
+　　　－参数：每次最多接收多少字节
+　　　－返回值：data  　接收到的数据
+　　　　　　　　addr    消息发送者的地址
+
+
+　　　n = sockfd.sendto(data,addr)
+　　　－功能：发送UDP消息
+　　　－参数：data　要发送的内容　bytes
+　　　　　　　addr　目标地址
+　　　－返回值：发送的字节数
+
+
+　　　－关闭套接字
+　　　sockfd.close()
+
+
+　　２．客户端流程
+　　　－创建套接字
+　　　
+　　　－收发消息
+
+　　　－关闭套接字
+
+二．UDP套接字之广播
+　　广播：一点播放，多点接收
+　　广播地址：一个网段中最大的地址，用于发送广播，此时该网段所有终端都能够接收．
+示例：broadcast_send.py
+     broadcast_recv.py
+

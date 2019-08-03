@@ -1,0 +1,40 @@
+一．Httpserver v3.0
+１．功能：
+[1]HTTPServer 部分
+－获取http请求
+－解析http请求
+－将请求发送给WebFrame
+－从WebFrame获取数据
+－将数据组织为HTTP响应发送给客户端
+
+[2]WebFrame部分
+－从httpserver获取请求
+－根据请求进行逻辑处理或者数据处理
+－将数据资源发送给httpserver
+
+２．升级点
+[1]httpserver和后端应用的独立，各自配置
+[2]优化了后端的数据处理和ur1模块
+[3]采用了配置文件的新软件设计形式
+
+３．HTTPServer
+包含文件：HTTPServer.py  主体程序
+　　　　　config.py  配置文件（随便取得名字）
+cookie:
+import json
+    json.dumps(dict)
+    功能：将python字典转换为json字符串
+    参数：字典
+    返回值：json字符串
+
+    json.loads(s):
+    功能：将json字符串转换为字典
+    参数：json字符串
+    返回值：字典
+
+4.WebFrame
+包含文件：WebFrame.py 主程序
+        settings.py 配置文件
+        static      目录存放网页
+        urls.py     url集合
+        views.py    数据处理模块

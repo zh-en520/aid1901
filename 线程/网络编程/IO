@@ -1,0 +1,135 @@
+一．IO
+１．什么是IO:在内存中存在数据交换的操作认为是ＩＯ操作
+　　e.g. 和终端交互：input  print
+　　　　　和磁盘交互：read   write
+　　　　　和网络交互：recv   send
+
+　　分类：
+　　－IO密集型程序：在程序执行过程中存在大量ＩＯ操作，而cpu运算较少，消耗cpu资源少，耗时长．
+　　－计算密集型程序：程序运行中计算较多，IO操作相对较少，CPU消耗大，运行速度快，阻塞少．
+
+２．IO分类：阻塞IO  非阻塞IO　　IO多路复用
+
+３．阻塞IO
+　　定义：在执行IO操作时，如果遇到执行条件不满足的情况，则阻塞．阻塞IO是IO的默认形态.
+　　阻塞情况：
+
+　　　－因为某种执行条件没有满足造成的函数阻塞．
+　　　e.g.　accept  input   recv   recvfrom
+
+　　　－因为处理IO的时间较长产生的阻塞行为．
+　　　e.g.　网络传输，或大文件的读写
+
+　　　－阻塞IO是效率很低的一种IO模型，但是逻辑简单，实现容易．
+
+４．非阻塞IO
+　　定义：通过修改IO的属性行为，使原本阻塞的IO函数变非阻塞的状态．
+
+　　－设置套接字的非阻塞IO
+　　　sockfd.setblocking()
+　　　　－功能：设置套接字为非阻塞IO
+　　　　－参数：如果设置为Ｆalse则将套接字变为非阻塞．　　　
+
+　　－超时检测：设置一个最长阻塞时间，超过该时间后则不再阻塞等待．
+　　　　－sockfd.settimeout(sec)
+　　　　　－功能：设置套接字超时时间
+　　　　　－参数：设置的时间
+
+5.IO多路复用　
+　　定义：同时监控多个IO事件，当哪个IO事件准备就绪就交由应用程序执行哪个IO，
+　　　　　以此形成可以同时处理多个IO的行为，避免一个IO阻塞造成其他IO均无法执行的情况，提高了效率．
+　　１．具体实现
+　　　select方法：windows  linux  unix  
+　　　poll  方法：linux   unix
+　　　epoll 方法：linux
+ 
+　　　python IO多路复用：import select
+
+二．python 实现IO多路复用
+１．select 方法
+　　rs,ws,xs = select(rlist,wlist,xlist[,timeout])
+　　－功能：监控IO事件，阻塞等待IO事件的发生
+　　－参数：rlist：关注IO的读事件，列表，存放关注的需要被动等待发生的IO事件
+          wlist：关注IO的写事件，列表，存放关注的可以主动处理的IO事件
+          xlist：关注IO的异常，列表，存放关注的出错需要处理的IO
+          timeout 超出时间
+
+    －返回值：　rs 列表　　rlist中准备就绪的IO
+              ws 列表　　wlist中准备就绪的IO
+              xs 列表　　xlist中准备就绪的IO
+
+2.select tcp服务端流程：
+　　１．将关注的IO放入对应监控列表
+　　２．通过select函数进行监控
+　　３．遍历select返回的各个列表，确定就绪的IO事件
+　　４．处理发生的IO
+
+　　注意：１．wlist中如果存在IO事件，则select立即将其返回
+　　　　　２．处理IO的过程中不要长期占有服务端（如死循环）
+　　　　　３．IO多路复用消耗资源较少，效率较高
+
+三．位运算
+
+定义：将整数转换为二进制，按二进制位进行运算
+运算符号：＆　　按位与（判断是否存在）
+　　　　　｜　　按位或（增加功能）
+　　　　　＾　　按位异或
+　　　　　＜＜　左移
+　　　　　＞＞　右移
+　　e.g. 14-->1110
+        19-->10011??????复习
+        １４＆１９＝０００１０＝２　　一０则０
+        １４｜１９＝１１１１１＝３１　一１则１
+        １４＾１９＝１１１０１＝２９　相同为０不同为１
+        １４＜＜２＝１１１０００＝５６向左移动低位补０
+        １９＞＞２＝１００＝４　　　　向右移动去掉低位
+
+
+作业：
+１．使用select完成一个服务端程序，要求将从客户端发来的信息和终端输入的内容都写入到一个日志文件中．该服务端可能链接多个客户端
+２．复习函数的使用，包括函数设计，参数传递
+
+
+四．基于　poll　方法的IO多路复用
+
+１．p = select.poll()
+　　－功能：创建poll对象
+　　－返回值：poll对象
+
+２．p.register(fd,event)
+　　－功能：注册关注的IO
+　　－参数：fd 关注的IO
+　　　　　　event 关注IO事件类型
+　　e.g.常用事件类型：
+　　　　POLLIN  读IO事件（rlist)
+       POLLOUT 写IO事件（wlist）
+        POLLERR 异常IO（xlist）
+        POLLHUP 断开连接
+
+　　e.g. p.register(sockfd,POLLIN|POLLERR)
+
+  p.unregister(fd)
+  -功能：取消对IO的关注；
+  -参数：IO对象或者IO文件描述符
+
+３．events = p.poll()
+　　－功能：阻塞等待IO事件发生
+　　－返回值：就绪的IO
+　　　　　　　events格式：[(fd,event),(),()...]
+
+4.步骤
+[1]创建套接字
+[2]将套接字register
+[3]创建查找字典并维护
+[4]循环监控发生的IO
+[5]处理发生的IO
+
+五．基于epoll的IO多路复用
+１．使用方法：基本与poll相同
+　＊将对象生成改为epoll
+　＊将所有事件类型改为EPOLL类型
+
+２．特点
+　＊epoll效率比select和poll要高
+　＊epoll能够同时监控IO的数量比select poll要多
+　＊epoll的触发方式比poll要多

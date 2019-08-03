@@ -1,0 +1,255 @@
+day12 回顾:
+  装饰器
+    def 装饰器函数名(fn被装饰函数):
+        def 新的函数名(形参列表):
+            语句块
+        return 新的函数名
+    
+    @装饰器函数名
+    def 被装饰函数名(形参列表):
+        语句块
+
+
+  函数的文档字符串
+    >>> help(函数名)  
+    函数名.__doc__
+
+  模块
+    模块是函数,数据,类等组成的程序组
+  模块的分类:
+    1. 内建模块(built-in)
+    2. 标准库模块
+    3. 第三方模块
+       pip install xxxxx
+    4. 自定义模块
+
+  模块的导入语句
+    import 语句
+        import math as m, time, sys
+    from import 语句
+        from math import sin, cos, factorial as fac
+    from import *语句
+        from math import *
+  
+  内建模块的使用
+    math模块
+    time模块
+  
+
+
+day13 笔记
+  运行时系统模块 sys
+    文档参见:
+      python_base_docs_html/系统模块sys.html
+    
+
+自定义模块并导入
+  要求:
+    模块名文件后缀名必须以 .py 结尾
+    模块文件名必须是合法的标识符
+    避免名称和内建模块名冲突
+
+  导入方式:
+    import 语句
+    from import 语句
+    from import * 语句
+
+  示例见:
+    mymod.py
+
+import 语句 搜索模块的路径顺序
+  1. 搜索内建模块
+  2. 搜索程序运行的路径(当前路径)
+  3. sys.path 提供的路径
+
+模块化编程的优点:
+  有利于多人合作开发
+  使代码更加易于维护
+  提高代码的复用率
+  模块化编程有助于解决函数名和变量名冲突,模块内的全局变量的作用
+    域为模块内全局
+
+模块的加载过程:
+  在模块导入时,模块的所有语句会执行
+  如果有一个模块已经导入,则再次导入时不会重新执行模块的语句
+
+模块被导入和执行的过程:
+  1. 先搜索相关路径找模块 xxx.py
+  2. 判断是否有此模块对应的.pyc 文件,如果pyc文件比.py文件新
+     则直接加载.pyc 文件 
+  3. 否则用模块.py 生成.pyc文件并加载执行
+
+  模块的编译
+             编译            解释执行
+  mymod.py  -----> mymod.pyc -----> python3
+
+
+模块的预置属性
+  模块的文档字符串
+    __doc__属性
+      用于绑定模块的文档字符串
+  
+  __file__属性
+    __file__属性用来绑定模块所对应的路径
+    注: 内建模块没有__file__属性
+
+  模块的__name__属性
+    作用:
+      1. 记录模块名
+      2. 用来判断是否为主模块
+    说明:
+      当此模块作为主模块运行时,__name__属性绑定'__main__'
+      当此模块不是主模块,而是被其它模块导入时,此模块名为去
+        掉.py 后缀的文件名
+      
+
+模块的 __all__ 列表
+  模块中的__all__列表是一个用来存放可导出属性的字符串列表
+
+  作用:
+    限制当用from import *语句导入时,只导入__all__列表
+      内的属性
+  示例见:
+    mymod2.py
+  注:
+    __all__ 列表只能影响 from import * 语句, import 语句
+    和 from import 语句不受影响
+
+
+模块的隐藏属性
+  模块中以 下划线(_) 开头的属性,在用from import *语句导入时
+  将不被导入,通常称这些属性为隐藏属性
+
+  示例见:
+    mymod3.py
+
+
+  
+
+随机模块
+  模块名: random
+  作用:
+    用于模拟或生成随机输出的模块
+  文档参见:
+    python_base_docs_html/随机模块random.html
+  
+练习:
+  猜数字游戏
+    随机生成一个0~100之间的整数,用变量x绑定
+    让用户输入一个数用y绑定.输入猜数字的结果
+      如果y等于生成的数x,则提示: "恭喜您猜对了"
+      如果y 大于 x, 则提示: "您猜的数字大了"
+      如果y 小于 x, 则提示: "您猜的数字小了"
+    循环让用户输入.直到猜对为止,显示用户猜数字的次数后
+    退出程序
+  
+
+包(模块包) package
+  包是将模块以文件夹的组织形式进行分组管理的方法
+
+  作用:
+    将一系列模块进行分组管理,有利于防止命名冲突
+    可以在需要时加载一个或部分模块而不是全部模块
+  包示例:
+    mypack/
+        __init__.py
+        menu.py
+        games/
+            __init__.py
+            contra.py
+            supermario.py
+            tanks.py
+        office/
+            __init__.py
+            word.py
+            excel.py
+    命令:
+        mkdir mypack
+        cd mypack
+        touch menu.py __init__.py
+        mkdir games office
+        cd office
+        touch __init__.py word.py excel.py
+        cd ../games
+        touch __init__.py contra.py supermario.py tanks.py
+        tree ..
+
+包的导入语法:
+  (模块的导入规则)
+  import 包名 [as 包别名]
+  import 包名.模块名 [as 模块新名]
+  import 包名.子包名.模块名 [as 模块新名]
+
+  from 包名 import 模块名 [as 模块新名]
+  from 包名.子包名 import 模块名 [as 模块新名]
+  from 包名.子包名.模块名 import 属性名 [as 属性新名]
+
+  from 包名 import *
+  from 包名.模块名 import *
+  ...
+import 语句 搜索包的路径顺序
+  1. 搜索程序运行时的路径(当前路径)
+  2. sys.path 提供的路径
+
+
+
+
+包内的 __init__.py 文件
+  __init__.py 是常规包内必须存在的文件
+  __init__.py 会在包加载时自动被调用
+
+  作用:
+    编写此包的内容
+    在内部填写包的文档字符串
+    在 __init__.py 文件内可以加载此包所依懒的一些其它模块
+  示例见:
+    mypack/__init__.py
+
+__init__.py 内的 __all__ 列表
+  作用:
+    用来记录此包中有哪儿些子包或模块需要导入
+    当用from 包 import * 语句导入时,只查找__all__列表中
+      所有的模块或子包
+  说明:
+    __all__ 列表只在from xxx import * 语句中起作用
+  示例见:
+    mypack/games/__init__.py
+
+包的相对导入
+  包的相对导入是指包内模块的相互导入
+
+  语法:
+    from 相对路径包或模块 import 属性或模块名
+    或
+    from 相对路径包或模块 import *
+  相对路径:
+    . 代表当前目录
+    .. 代表上一级目录
+    ... 代表上二级目录
+    .... 以此类推
+    注: 相对导入时不能超出包的外部
+  示例见:
+    mypack/games/contra.py
+
+
+
+练习:
+  1. 模拟斗地主游戏发牌,扑克牌 54张
+    黑桃('\u2660'), 梅花('\u2663'), 方块('\u2665)
+    红桃('\u2666)
+    数字: A2~10JQK
+    大小王
+  三个人,每个人发17张牌,底牌留三张
+    输入回车,打印第一个人的17张牌
+    输入回车,打印第二个人的17张牌
+    输入回车,打印第三个人的17张牌
+    输入回车,打印3张底牌
+
+  2. 将学生信息管理程序拆分为模块
+    要求:
+      1. 主事件循环while True 放在main.py中
+      2. show_menu 函数放在menu.py中
+      3. 与学生操作相关的函数放在 student_info.py 中
+
+
+

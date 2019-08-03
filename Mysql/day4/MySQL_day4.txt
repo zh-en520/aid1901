@@ -1,0 +1,145 @@
+课程：MySQL关系型数据库
+进度：day4
+
+上次内容回顾
+
+1. 子查询：一个查询语句中，嵌套了另
+   一个查询
+   select * from orders where amt >
+   (select avg(amt) from orders);
+
+2. 联合查询：将多个表的数据进行查询，
+   返回一个结果集（二维表）
+   
+   笛卡尔积：集合乘积，将集合中的元素
+             两两组合得到的新集合。逻辑
+			 含义是两个集合元素可能的
+			 组合
+   笛卡尔积和关系：笛卡尔积去掉没有
+      意义的数据就是关系
+
+   分类：内连接、外连接（左、右）
+   
+   内连接：关联不到的数据不显示
+   外连接：关联不到的数据也显示
+   
+   左连接：以左表为主，数据全部显示，
+           右表关联，关联不到的数据
+		   填写NULL
+   右连接：以右表为主，数据全部显示，
+           左表关联，关联不到的数据
+		   填写NULL
+		   
+3. 约束：数据的规则
+  - 非空约束：字段的值不能为空
+  - 唯一约束：字段的值不能重复
+  - 主键约束：非空、唯一
+  - 默认值：不赋值时系统自动填默认值
+  - 自增长：字段的值自动增加
+  - 外键约束：某个属性在当前表中不是
+    PK，在另外的表中是PK；添加外键约束
+	后，要求所参照的实体必须存在
+	
+今天的内容
+一、索引（重点）
+1. 什么是索引
+1）索引是一种提高查询(检索)效率的
+   技术，通过对数据表中一列或多列
+   排序，查询时避免全表扫描，从而
+   提高查询效率
+2）索引是一种数据结构（树状结构），
+   包含数据的存储位置（引用指针），
+   能根据该指针快速找到数据
+
+2. 索引的分类
+1）普通索引、唯一索引
+  - 普通索引：允许插入空值、允许重复
+  - 唯一索引：值不能重复，可以为空
+2）单列索引、复合索引
+  - 单列索引：一个索引只包含一列
+  - 复合索引：一个索引包含多列
+3）创建索引
+  - 建表时创建索引
+    语法：
+	index|unique|primary key(字段)	
+	说明：
+	index  普通索引
+	unique 唯一索引
+	primary key 主键，特殊唯一索引
+	
+    示例
+    create table index_test(
+	  id int primary key, 
+	  cert_no varchar(32),
+	  name varchar(32),
+	  unique(cert_no), -- 唯一索引
+	  index(name) -- 普通索引
+	);
+	查看：show index from index_test;
+	insert into index_test 
+	  values(1,'0001','Jerry');
+	  
+	-- 唯一索引不能重复，插入报错
+	insert into index_test 
+	  values(2,'0001','Tom');
+	  
+    -- 插入id值为NULL的数据，违反主键
+    -- 非空约束，报错
+    insert into index_test 
+	  values(NULL, '0002', 'Emma');
+
+  - 表创建后添加索引
+    语法：
+	create 索引类型 索引名称
+	on 表名(字段名)
+	
+	示例：
+	-- 先删除index_test表上名称为
+	-- cert_no的索引
+	drop index cert_no on index_test;
+	-- 再在index_test表的cert_no
+	-- 字段上创建名称为idx_cert_no
+	-- 的索引
+	create unique index idx_cert_no
+	on index_test(cert_no);
+	
+实验：
+  步骤
+  第一步：创建表或找一个已存在的表，
+  先确认该表无索引，利用现有的orders表
+  
+  第二步：利用脚本插入10万笔数据
+  见insert_orders_many.py
+  
+  第三步：无索引查询，记录查询时间
+	select * from orders 
+	  where order_id = '2018010100000002'; -- 0.08秒
+	select * from orders 
+	  where order_id = '2018010100055556'; -- 0.07秒
+	select * from orders 
+	  where order_id = '2018010100999994'; -- 0.08秒
+  
+  第四步：添加索引，执行同样查询
+  create index idx_order_id 
+  on orders(order_id); -- 创建索引
+
+
+
+2. 索引的分类
+3. 创建、删除索引
+4. 实验：索引对查询效率的影响
+5. 索引的优缺点
+6. 索引使用要点
+
+二、数据库事务（重点）
+三、权限
+
+
+
+
+
+
+
+
+
+

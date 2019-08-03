@@ -1,0 +1,292 @@
+一、HTML基础
+
+1.什么是HTML?
+
+HTML[HyperText Markup Language],超文本标记语言
+
+HTML最新的版本为HTML5（简称H5）
+
+2.HTML有什么用?
+
+HTML用于搭建页面的结构；
+
+3.HTML5文档的基本结构
+
+<!DOCTYPE html>
+<html>
+  <head>
+     <meta charset="编码方式">
+     <title>网页标题</title>
+  </head>
+  <body>
+     网页正文
+  </body>
+</html>
+
+网页文件的扩展名为 .html 或 .htm
+
+4.HTML标记分类
+
+单标记:<标记>
+
+双标记:<标记>...</标记>
+
+说明：
+
+A.标记名称必须为英文小写字母;
+
+B.标记之间必须顺序嵌套;
+
+5.按是否换行进行划分
+
+行内元素(Inline Element),不换行,宽度由内容的多少决定
+
+块级元素(Block Element),换行,宽度默认为其父对象的100%
+
+二、文本修饰标记
+
+加粗(bold):<b>...</b>或<strong>...</strong>
+
+倾斜(italic):<i>...</i>或<em>...</em>
+
+下划线(underline):<u>...</u>
+
+删除线:<s>...</s>或<del>...</del>
+
+三、段落与换行
+
+段落(Paragraph)<p align="left|center|right">...</p>
+
+换行(Break Line)<br>
+
+四、标题(heading)
+
+<h1 align="left|center|right">....</h1>
+<h2 align="left|center|right">....</h2>
+<h3 align="left|center|right">....</h3>
+<h4 align="left|center|right">....</h4>
+<h5 align="left|center|right">....</h5>
+<h6 align="left|center|right">....</h6>
+
+五、图像
+
+1.浏览器支持的图像格式
+
+GIF,支持透明色，支持动画，最多仅支持256种颜色;
+
+JPG/JPEG,不支持透明色，不支持动画，最多支持1670万种颜色;
+
+PNG,支持透明色，不支持动画，最多支持1670万种颜色;
+
+webp格式是谷歌浏览器支持的一种图像格式，其体积约为JPEG的2/3
+
+2.图像标记
+
+<img src="图像路径" alt="注释">
+
+3.路径
+
+A.绝对路径:由完整的协议名称、主机名称及路径组成;
+
+B.相对路径:从当前文档开始的路径;
+
+C.根相对路径:从根目录开始的路径，总是以"/"开头;
+
+4.全局属性
+
+title,注释内容
+id,标记的唯一标识(CSS样式或JavaScript或jQuery)
+class,标记使用的CSS类(多个CSS类名称之间以空格分割)
+style,标记的行内样式
+data-*,自定义HTML标记属性
+
+六、HTML实体(HTML Entities)
+
+大于号(>)用&gt;表示(greater than)
+
+小于号(<)用&lt;表示(less than)
+
+双引号(")用&quot;表示
+
+单引号(')用&#39;表示
+
+连接符(&)用&amp;表示
+
+不间断空格( )用&nbsp;表示
+
+版权符号用&copy;表示(copyright)
+
+注册商标用&reg;表示(register)
+
+七、列表
+
+1.无序列表(Unordered List)
+
+<ul type="circle|square|disk">
+    <li>...</li>
+    ...
+</ul>
+
+2.有序列表(Ordered List)
+
+<ol type="1|a|A|i|I">
+	<li>...</li>
+	...
+</ol>
+
+八、链接
+
+1.链接标记
+
+<a href="目标文档路径" target="窗口形式">...</a>
+
+窗口形式
+
+_self:在自身窗口打开(默认)
+
+_blank:在新窗口打开
+
+<base target="窗口形式">
+
+九、DIV标记
+
+<div>...</div>
+
+十、表格
+
+1.表格的作用
+
+呈现规则有序的数据
+
+2.表格标记
+
+<table width="宽度" border="边框宽度" cellpadding="单元格内边距" cellspacing="单元格外边距">
+   
+     <tr>
+         <td|th>....</td|/th>
+         ...
+     </tr>
+
+     ...
+
+</table>
+
+行分组
+
+<thead>...</thead>
+
+<tbody>...</tbody>
+
+<tfoot>...</tfoot>
+
+
+
+
+----------------------------------------------------------------------
+１．表单的作用
+收集客户端信息，提交到服务器
+2.表单提交方式
+<form name='名称' method='表单提交方式'
+action='服务器URL地址'　enctype='编码类型'>
+
+</form>
+说明：
+method默认为get方式
+A.表单提交方式：get或post
+-)get方式提交的数据以名/值对形式附加在URL地址后；
+　post方式提交的数据会附加在HTTP请求体内发送到服务器
+-)get提交的数据最多为1024字节
+　post提交的数据理论上无限制
+
+B.action属性一般来指定动态服务器脚本文档，用于接收并处理表单的提交数据；
+　如果省略action属性，则表单将提交给自身页面；
+
+C.enctype属性只有在进行文件上传时才需要设置，而且属性值只能为multipart/form-data;
+
+3.表单元素
+
+所有的表单元素必须赋予有效名称
+
+3.1 单行文本框
+<input type='text' name='名称' value='值'
+placeholder='提示文本' autocomplete='on|off' maxlength='10'>
+
+3.2 密码框
+<input type='password' name='名称' value='值'
+placeholder='提示文本'>
+
+3.3 单选框
+<input type='radio' name='名称' value='值' checked[/checked='checked']>
+说明：
+checked 表示默认；一组类型的单选框名称必须相同；必须为单选框赋予有效值；
+id='male'><label for='male'>男<label>
+注意：label for id 绑定组件
+3.4 复选框
+<inpit type='checkbox' name='名称' value='值' checked>
+说明：
+一组类型的复选框名称必须相同；必须为复选框赋予有效值；
+
+3.5 浏览框
+<input type='file' name='名称' accept='上传的文件类型'>
+说明：
+A.具有浏览框的表单必须设置enctype='multipart/form-data'属性
+B.具有浏览器的表单，其提交方式只能为post
+常见的文件类型
+image/*,所有的图像类型；
+image/gif,所有的gif类型；
+image/jpeg,所有的jpg/jpeg类型；
+image/png,所有的png类型；
+
+MIME类型：
+大类型/具体类型
+
+3.6 隐藏域
+<input type='hidden' name='名称' value='值'>
+隐藏域用于来提交正确的／但又无需用户干涉的信息(如令牌)；
+
+3.7 按钮
+提示按钮：<input type='submit' value='值'>
+重置按钮：<input type='reset' value='值'>
+普通按钮：<input type='button' value='值'>
+
+3.8 下拉列表框
+<select name='名称' multiple>
+    <optgroup lable='组名'>
+        <option value='值' selected>...</option>
+        ...
+    </optgroup>
+    ...
+</select>
+
+3.9 多行文本框
+<textarea name='名称' rows='行数' cols='列数'　placeholder='提示文本'>值</textarea>
+
+在线的HTML编辑器有：
+A.UEditor
+B.kindEditor
+C.ckEditor
+
+布尔属性
+A.单选框和复选框的checked
+B.列表框的multiple和列表项的selected
+C.所有表单元素的disabled和readonly.
+
+二．iframe标记(嵌套)
+<iframe src='网页URL地址'　width='宽度' height='高度'
+frameborder='0|1' scrolling='yes|no|auto'></iframe>
+
+三．视频
+<video src='视频URL地址' width='宽度' height='高度'></video>
+
+<span></span>
+
+
+
+
+
+
+
+
+
+
+

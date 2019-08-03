@@ -1,0 +1,236 @@
+一．关于GIT
+１．什么是git:是一个开源的分布式版本控制系统，用于高效的管理大小项目和文件．
+２．什么是代码管理工具：SVN,GIT
+    功能：
+    －做代码的备份，防止丢失
+    －做代码的版本控制(加时间戳等,便于删改)
+    －方便项目的管理
+    －方便多人的协同工作
+３．git的特点
+    －git是开源的，多在＊nix下使用，可以管理各种文件
+    －安全性强，适用于开源项目开发，分享速度快
+    －git拥有更好的分支支持，方便多人协同
+４．git安装：sudo apt-get install git
+
+二．git使用
+１．基本概念
+[1]工作区：项目文件的所在目录，用于项目的操作空间
+[2]暂存区：用于记录工作区的修改工作内容
+[3]仓库区：用于将记录的工作内容备份
+[4]远程仓库：远程主机上的git仓库
+
+２．git的初始化设置
+命令：　git config
+[1]配置系统所有用户：get config--system [内容]
+   配置文件：/etc/gitconfig
+[2]配置当前用户：git config--global [内容]
+   配置文件：~/.gitconfig
+[3]配置当前项目：git config [内容]
+   配置文件：项目目录/.git/config
+   要求：必须在git管理项目目录下执行
+
+配置内容：
+[1]配置用户名：sudo git config --system user.name Tedu
+[2]配置邮箱：git config --global user.email 1207072203@qq.com
+[3]配置编译器：git config core.editor vscode
+tarena@tedu:~/git$ git init
+初始化空的 Git 仓库于 /home/tarena/git/.git/
+[4]查看当前项目配置：git config --list
+
+３．git基本操作
+[1]查看命令帮助：git help [command]
+[2]初始化仓库：git init
+   意义：将某个目录变为git操作目录，此时生成git仓库．该目录即可使用git管理．
+[3]查看工作分支状态：git status
+   说明：干净的　　　　(工作区和仓库一致)
+   　　　有未跟踪的　　(工作区内容未提交到暂存)
+   　　　有未同步的　　(暂存区内容未同步到仓库)
+[4]提交文件到暂存区：git add [files]
+  e.g. git add file1 file2
+       git add *
+[5]取消暂存：git rm --cached [file]
+[6]将文件同步到本地仓库区：git commit -m ［＇msg＇］
+   说明：同步只能同步暂存区记录内容，每次同步要添加同步信息
+[7]查看commit记录：git log
+   单行查看：git log --pretty=oneline
+[8]对比工作区文件和仓库区文件差异：git diff ['poll_server.py']
+[9]放弃工作区的修改：git checkout -- ['poll_server.py']
+[10]从仓库区恢复文件：git checkout ['poll_server.py']
+[11]移动或者删除文件并提交暂存：
+   git mv..
+   git rm..
+
+４．版本控制命令
+[1]退回上一个commit节点：git reset --hard HEAD^
+   说明：HEAD是commit指针，一个^表示后退一个commit
+[2]指定去往某个commit操作节点：git reset --hard 360104a
+   说明：commit_id取前7位即可
+[3]查看所有操作记录：git reflog
+   说明：最新的记录永远在最上边
+[4]标签创建：git tag [名称]　-m [msg]
+   说明：在工作的重要commit位置添加快照，保存当时的工作内容，一般用于重要的里程碑节点或者版本迭代．
+   说明：如果不写commit_id表示在最近的commit节点添加标签．如果写则表示在指定的commit_id添加标签．
+  
+[5]查看标签：
+   git tag v1.0 -m 'init tag'
+   git tag
+   git show v1.0
+   git tag v1.1 95c0f2b -m 'rm and move'
+[6]去往标签的版本：git reset --hard v1.0
+　　　　　　　　　　git reset --hard v1.1
+[7]删除标签：git tag -d [tag]
+
+５．临时工作区
+[1]创建临时工作区：git stash
+   意义：将工作区操作内容暂时封存，让工作区回到修改之前的状态．
+[2]查看工作区：git stash list
+   说明：最新保存的工作区在最上边
+   e.g. 
+   tarena@tedu:~/git$ git stash list
+   stash@{0}: WIP on master: 817c91f 再来一批
+   stash@{1}: WIP on master: 817c91f 再来一批
+
+[3]应用某个工作区：git stash apply [stash]
+   e.g. git stash apply stash@{1}
+
+[4]删除某个工作区：git stash drop stash@{1}
+   删除整个工作区: git stash clear
+
+６．分支管理
+[1]什么是分支：分支即每个人在原有代码基础上建立的自己的工作环境，单独开发，不会干扰其他分支操作．
+　　　　　　　　完成开发后，再统一合并为一个主线．
+[2]建立分支的优点：安全，不影响其他分支，独立控制进度
+[3]分支操作命令
+  －查看分支情况：git branch
+  说明：前面带＊表示当前正工作分支
+
+  －创建新的分支：git branch [branch_name]
+  注意：基于某个分支创建新分支时，原分支最好＇干净＇．
+
+  －切换工作分支：git checkout [branch_name]
+  e.g. git checkout Jame_dev
+  注意：git checkout -b [branch_name] 可以同时完成创建和切换分支工作
+
+  －合并分支：git merge [branch]
+  e.g. git merge Tom_dev
+  注意：
+  ＊合并分支过程中产生冲突需要自己解决
+  ＊在分支操作中尽量不要修改原有内容
+
+  －删除分支：git branch -d [branch]
+  注意：没有被合并的分支可以使用-D强制删除．
+
+作业：
+１．git命令复习
+２．登录github.com 注册帐号
+
+---------================***************==============---------------
+
+
+
+复习
+
+1. 什么是代码管理工具，什么是git？
+2. git安装配置
+  
+	 git  config
+
+3. git的仓库结构和基本命令
+   
+	 git init    git add (mv rm)   git commit
+
+	 git log   git status   git reflog  git diff  
+	 git  checkout
+
+4. git的版本管理
+   git  reset  --hard 
+	 git  tag 
+
+5. git临时工作区
+	 git stash
+
+6. git的分支管理
+   git branch
+	 git checkout
+	 git merge
+
+********************************************************
+
+一. 远程仓库操作
+  
+	1. 什么是远程仓库：远程主机上的git仓库。实际上git是分布式结构，每台主机的git仓库结构类似，只是把其他主机的git仓库称为远程仓库。
+
+	2. 共享仓库：git分布式衍生了很多工作模式，共享仓库是比较常见模式。普通的git仓库代码无法与远程共享，而共享仓库可以
+
+	3. 配置共享仓库
+
+	  【1】 选择共享仓库目录，设置目录属主
+		      
+					mkdir  gitrepo
+					chown  tarena:tarena gitrepo
+				
+    【2】 进入该目录初始化为git共享仓库
+		     
+				 cd gitrepo
+				 git  init  --bare  tedu.git
+
+				 注意：tedu为共享仓库项目名称，.git为习惯后缀
+		
+		【3】 将仓库配置目录属主设置为与共享仓库相同属主
+  
+		     chown -R tarena:tarena tedu.git
+
+
+  4. 添加项目到远程仓库
+
+   【1】 创建于远程仓库连接
+	      
+			git  remote  add  origin  tarena@127.0.0.1:/home/tarena/gitrepo/tedu.git（SSH的通用格式）
+
+			注意： origin是给远程主机起的名字
+			       tarena@127... 表示远程主机共享仓库地址
+
+      查看远程主机：  git  remote
+			删除远程主机：  git  remote  rm  [远程主机名]
+
+    
+	【2】 将本地分支推送给远程仓库
+
+	    git  push  -u   origin  master
+
+      
+			* -u 表示建立本地分支与远程仓库对应分支关联，一般在首次向远程推送新分支时使用
+
+  【3】 获取远程仓库项目
+
+	    git clone tarena@127.0.0.1:/home/tarena/gitrepo/tedu.git
+
+  
+	【4】 其他push用法
+
+      * 推送标签：  git  push origin  [tag]
+
+      * 断开远程分支关联： git push origin  :[branch]
+
+  【5】 从远程主机获取内容
+
+	    * 获取对应远程主机分支内容： git  pull
+
+      * 获取远程分支：git pull origin Tom_dev
+
+      * 将远程分支内容拉取到本地一个新分支中：
+			  git fetch origin  master:tmp
+
+
+二. GitHub使用
+
+  1. 介绍 ： github是一个社区网站，拥有全球最多的开源项目。开发者可以注册网站，建立自己的项目仓库。
+
+	2. 项目获取：查找项目－－＞选择项目－－＞clone获取
+
+　３．如何创建仓库：创建仓库－－＞上传项目
+
+　４．Linux创建密钥：ssh-keygen
+
+
+

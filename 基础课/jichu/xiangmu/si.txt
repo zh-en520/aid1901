@@ -1,0 +1,3 @@
+{'name'='小李','age'=20,'score'=60},
+{'name'='小魏','age'=21,'score'=95},
+{'name'='小赵','age'=19,'score'=55}

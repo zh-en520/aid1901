@@ -1,0 +1,238 @@
+day17 回顾
+  面向对象编程 OOP(object-oriented programming)
+    支持OOP的语言:
+        C++, Java, Python, objective-C, swift C#
+  对象:
+    行为(方法method)
+    属性(实例属性)
+
+  类
+    class Student:
+        def __init__(self, n, a, s):
+            '''初始化方法'''
+        def __del__(self):
+            '析构方法'
+        def set_score(self, s):
+            ...
+        def get_score(self):
+            return self.score
+
+  实例方法, 描述或规定对象能有哪些行为
+  实例属性, 记录每个对象自身的数据(属性)
+     添加和修改
+        obj.attr = 表达式
+     删除
+        del obj.attr
+  初始化方法__init__(self, ....) 把所有对象添加相同个数的属性
+  析构方法 __del__(self)   在对象销毁前释放对象自身占用的资源
+  
+  预置的实例属性:
+    __dict__ 绑定存储实例属性的字典
+    __class__ 绑定创建此对象的类
+
+  isinstance(obj, 类或元组)
+  type(obj)
+
+
+day18笔记:
+类属性
+  类属性是类的属性,此属性属于类,不属于此类的实例
+  
+  作用:
+    通常用来存储该类创建的对象的共有属性
+  说明:
+    类属性,可以通过该类直接访问
+    类属性可以通过此类的实例直接访问(取值不能赋值)
+    类属性可以通过此类对象的'__class__' 属性间接访问
+    实例方法和类方法都属于类的属性
+  示例见:
+    class_attribute.py
+
+
+类的文档字符串:
+  类内第一个没有赋值给任何变量的字符串为类的文档字符串
+  类的文档字符串绑定在类的__doc__属性上
+
+  示例:
+    class Dog:
+        '这是Dog类的文档字符串'
+    print(Dog.__doc__)
+    >>> help(Dog)
+
+类的 __slots__ 列表
+  作用:
+    限定一个类创建的实例只能有固定的实例属性
+    不允许对象添加列表以外的实例属性
+    防止用户因错写属性的名称而发生程序错误
+  说明:
+    含有'__slots__' 列表的类所创建的实例对象没有'__dict__'
+    属性,即此实例不用字典来存储实例属性
+  示例见:
+    slots_list.py
+
+
+类方法 @classmethd
+  类方法是用于描述类的行为的方法,类方法属于类,不属于该类创
+    建的对象
+
+  说明:
+    类方法需要使用@classmethod装饰器定义
+    类方法至少有一个形参,第一个形参用于绑定类,约定写为'cls'
+    类和该类的实例都可以调用类方法
+    类方法不能访问此类创建的对象的实例属性
+  示例见:
+    class_method.py
+
+
+静态方法 @staticmethod
+  静态方法是定义在类的内部的函数,此函数的作用域是类的内部
+
+  说明:
+    静态方法需要使用@staticmethod 装饰器定义
+    静态方法与普通函数定义相同,不需要传入self实例参数和cls类参数
+    静态方法只能凭借类或类创建的实例调用
+    静态方法不能访问类属性和实例属性
+  示例见:
+    static_method.py
+
+
+小结:
+  函数       操作全局变量和局部变量
+  实例方法    操作全局变量,局部变量,实例属性,类属性
+  类方法      操作全局变量,局部变量,类属性
+  静态方法    操作全局变量,局部变量(作用域在类内)
+
+
+class 用类来描述一个学生的信息(可以修改之前的Student类)
+  class Student:
+     ... 此处自己实现
+  学生信息有: 姓名,年龄,成绩
+
+  将这些学生对象存于列表中,可以任意添加和删除学生信息
+    1. 打印学生的总个数
+    2. 打印出所有学生的平均成绩
+  (建议用类来封装学生信息,用函数或类方法对学生数据进行操作)
+
+
+继承(inheritance) 和 派生(derived) 
+什么是继承和派生
+  继承是从已有类中派生出新类,新类具有原类的属性和行为.
+  派生就是从一个已有类中衍生出新类,在新类上可以添加新的属性和行为
+
+说明:
+  继承的目的是延续旧的类的功能
+  派生的目地是在旧类的基础上添加新的功能
+作用:
+  用继承派生机制,可以将一些共有功能加在基类中,实现代码的共享
+  在不改变基类的代码的基础上改变原有类的功能
+
+名词:
+  基类(base class)/超类(super class)/父类(father class)
+  派生类(derived class)/子类(child class)
+
+
+单继承
+  语法:
+    class 类名(基类名):
+        语句块
+  说明:
+    单继承是指派生类由一个基类衍生出新类
+  示例见:
+    inherit.py
+
+继承说明:
+  Python3任何类都直接或间接的继承自object类
+  object类是一切类的超类
+
+类的__base__属性
+  __base__属性用来记录此类的基类
+
+查看全部python3内建类的继承关系的方法:
+  >>> help(__builtins__)
+
+思考:
+  list 类里只有append向末尾追加数据的方法,但没有向列表头部
+  添加元素的方法,试想能否为例表在不改变原有功能的基础上添加
+  一个insert_head(n) 方法来实现向头部插入数据?
+  即:
+    class MyList(list):
+        def insert_head(self, n):
+            ...
+    myl = MyList(range(3, 6))
+    print(myl)  # [3, 4, 5]
+    myl.insert_head(2)
+    print(myl)  # [2, 3, 4, 5]
+    myl.append(6)
+    print(myl)  # [2, 3, 4, 5, 6]
+
+覆盖 override
+  什么是覆盖
+    覆盖是指在有继承关系的类中,子类中实现了与基类同名的方法,在
+    子类的实例调用该方法时,实际调用的是子类中的覆盖版本,这种现象
+    叫覆盖
+  作用:
+    实现和父类同名,但功能不同的方法
+  示例见:
+    override.py
+
+
+问题:
+  当覆盖发生时,子类对象能否调用父类中的方法?
+
+子类对象显式调用父类方法的方式:
+   基类名.方法名(实例, 实际调用传参, ...)
+
+super 函数:
+  super(cls, obj)  返回绑定超类的实例(要求obj必须为cls类型
+                   的实例)
+  super()  　　　　　返回绑定超类的实例,等同于:
+                   super(__class__, 实例方法的第一个参数),
+                   必须在方法内调用
+  作用:
+    借助super() 返回的实例间接调用其父类的覆盖方法
+
+
+显式调用基类的初始化方法:
+  当子类中实现了__init__ 实例方法时，基类的初始化方法并不会
+  被调用.如何显式调用父类的初始化方法?
+
+  示例见:
+    super_init.py
+
+用于类的函数:
+  issubclass(cls, class_or_tuple) 判断一个类是否继承自其
+  　　　　它的类，如果此类cls是class或tuple中的一个类的派生子
+  　　　　类则返回True, 否则返回False
+  示列:
+    class A:
+        pass
+    class B(A):
+        pass
+    class C(B):
+        pass
+    issubclass(C, B)  # True
+    issubclass(B, C)  # False
+    issubclass(C, A)  # True 
+    issubclass(B, (int, float, A))  # True
+    issubclass(bool, int)  # True
+
+
+练习:
+  写一个类Bicycle类(自行车类), 有run方法,调用时显示骑行里程
+    class Bicycle:
+        def run(self, km):
+            print("自行车骑行了", km, '公里')
+　再写一个类EBicycle(电动自行车类), 在Bicycle类的基础上添加
+    电池电量volume属性，
+    有两个方法:
+      1.fill_charge(vol)  用来充电，vol为电量（度)
+      2. run(km) 方法每骑行10km 消耗电量1度，同时显示当前
+      　　电量，当电量耗尽时，则调用Bicycle的run方法（人力
+      　　骑行)
+    class EBicycle(Bicycle):
+        ... # 此处自己实现，逻辑要符合现实
+    b = EBicycle(5)  # 新买的电动车内有5度电
+    b.run(10)  # 电动骑行了10公里，还剩4度电
+    b.run(100)  # 电动骑行了40公里，还剩0度电，人力骑行60km
+    b.fill_charge(10)  # 电动自行车充电10度
+    b.run(50)  # 电动骑行了50公里，还剩5度电

@@ -1,0 +1,16 @@
+一．本地套接字
+１．功能：用于本地两个进程之间通信
+２．套接字文件：用于本地套接字通信时，进行数据传输的介质
+３．本地套接字通信流程
+　[1]创建本地套接字
+  sockfd = socket(AF_UNIX,SOCK_STREAM)
+  [2]绑定本地套接字文件
+  sockfd.bind(file)
+  [3]监听，接收连接，收发消息
+  listen()-->accept-->recv/send()
+
+cookie: linux文件类型
+　　b(块设备文件)　　c(字符设备文件)　　d(目录)　　－(普通文件)　　　l(链接文件)　　s(套接字文件)　　p(管道文件)
+
+cookie: 判断文件是否存在：os.path.exists(file)
+        删除文件：os.remove(file)

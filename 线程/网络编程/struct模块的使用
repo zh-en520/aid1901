@@ -1,0 +1,23 @@
+一．struct模块的使用
+１．原理：将一组简单的数据进行打包，转换为bytes格式．或者将一组bytes格式数据解包为python的数据类型．
+２．接口使用
+　[1] st = Struct(fmt)
+　　　功能：生成结构化对象
+　　　参数：fmt 定制的数据结构
+　　e.g. 数据结构：１  　　b'zhangsan'  1.75
+           fmt :'i8sf'
+    
+　[2] st.pack(value,...)
+　　功能：将一组数据按照指定格式转换为bytes
+　　参数：要转换的一组数据
+　　返回值：bytes字节串
+
+　[3] st.unpack(bytes_data)
+　　功能： 将bytes字节串按照指定格式解析
+　　参数： 要解析的字节串
+　　返回值：解析后的数据
+
+　[4] struct.pack(fmt,value,...)
+　　　struct.unpack(fmt,bytes_data)
+　　　说明：通过struct模块直接调用pack,unpack需要加第一个参数为fmt．其他用法相同．
+

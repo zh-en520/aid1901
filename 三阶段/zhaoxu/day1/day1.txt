@@ -1,0 +1,286 @@
+项目：自己完善
+web server端
+1.flask - 轻量级web框架
+2.ajax - web中异步技术
+3.django - 重量级web框架
+
+1.静态网页＆动态网页
+    无法与服务器进行交互；
+
+    能够与服务器交互；
+
+2.web与服务器
+    服务器：能够给用户提供服务的计算机
+
+    硬件＆软件：
+    一台主机；
+    一个能够接收用户请求并给出响应的程序；
+    应用软件：
+    APACHE;TOMCAT;IIS--Internet Information Service;Nginx
+
+    服务器的作用
+    存储web上的信息；
+    处理用户请求并给出响应；
+    执行处理程序；
+    具备一定的安全功能；
+
+3.框架
+    框架是一个为了解决框架性问题而存在的程序结构；
+
+    python -> web:
+    1.flask - 轻量级框架
+    2.webpy - 轻量级框架
+    3.Tornado - 异步框架
+    4.django - 重量级框架
+
+    框架模式：
+    1.MTV
+        M:models,模型层，与数据库打交道 - ORM
+        T:Templates,模板层(网页/前端页面)
+        V:Views,视图层，处理与用户打交道的内容
+    2.MVC
+        M:models,模型层，与数据库打交道 - ORM
+        V:Views,前端页面
+        C:Controller,控制器，处理请求和响应
+
+4.Flask框架
+    Flask是一个基于python并且依赖于Jinja2模板引擎和Werkzeug WSGI服务的一个微型框架(Micro Framework)
+    WSGI:Web Server Gateway Interface
+        WEB 服务网关接口
+    官网：http://flask.pocoo.org
+
+    安装flask:
+        1.查看版本
+        交互模式下，
+        import flask
+        没反应：正确
+        flask.__version__：查看版本
+
+        2.安装flask
+        sudo pip3 install flask == 1.0.2
+
+5.Flask - 路由(route)
+    1.路由是为了匹配用户的请求地址以及对应的视图函数
+
+    2.路由的实现：在Flask中，路由是通过@app.route()来表示的
+    语法：@app.route('地址')
+    def funName():
+        业务实现
+        return "" #　响应给客户端浏览器的内容
+    示例：
+    --.http://127.0.0.1:5000
+     @app.route('/')
+     def index():
+        return "这是首页"
+
+    --.http://127.0.0.1:5000/admin/login
+     @app.route('/admin/login')
+     def login():
+        return "xxxx"
+
+    3.带参数的路由实现
+        http://127.0.0.1:5000/show/lvzemaria
+        http://127.0.0.1:5000/show/laowei
+        http://127.0.0.1:5000/show/wangdanbo
+
+        1.基本带参路由
+            参数语法：通过＜参数名＞
+            @app.route("/show/<name>")
+            def show(name):
+                #name 表示的就是路由中的name参数值
+                pass
+
+        2.带多个参数的路由
+            @app.route("/show/<name>/<age>")
+            def show(name,age):
+                #name 表示的就是url中的name参数值；
+                #age  表示的就是路由中的age参数值；
+
+        嫩死未退出的程序：
+        netstat -lptu　查看本机所开的所有端口
+        tcp 0  0 localhost:5000  *:*  LISTEN　 8750/python3.5
+        sudo kill -9 8750　杀死程序
+        tcp 0  0 localhost:5000  *:*  LISTEN　 9214/python3.5  重新查询，死而不僵
+        sudo kill -9 9214　再次杀死程序
+
+        3.指定参数类型的路由
+            @app.route('/show/<int:num1>')
+            def show(num1):
+               # num1 允许直接当成整数来处理
+            int:称为"类型转换器"
+
+            Flask中所支持的类型转换器：
+            类型转换器   作用
+            缺省        字符串，不能包含斜杠(/)
+            int:        整数
+            float:      浮点数
+            path:       字符串，允许包含斜杠(/)
+
+        4.多url的路由匹配
+            多个访问地址最终匹配到同一个视图处理函数
+            需求：
+                http://127.0.0.1:5000
+                http://127.0.0.1:5000/index
+                http://127.0.0.1:5000/default
+                访问任何一个地址，要在网页中输出："这是首页"
+
+            语法：
+                @app.route('/地址1')
+                @app.route('/地址2')
+                ... ...
+                def index():
+                    return xxx xxx
+            练习：
+                当访问路径是以下任何一种的时候
+                http://127.0.0.1:5000
+                http://127.0.0.1:5000/index
+                http://127.0.0.1:5000/数字
+                http://127.0.0.1:5000/index/数字
+                响应给客户端的内容：
+                如果路由器中有数字参数传递进来的话，响应：您当前要看的页数为第xx页
+                如果路由器中没有数字参数传递进来的话，响应：您当前要看的页数为第１页
+
+6.Flask - 模板(Templates)
+    1.模板就是能够呈现给用户看的html+python的网页结构；
+    　在模板中，允许包含"变量"以及"标签"表示动态内容．
+
+    Flask中的模板是依赖于JInja2的模板引擎
+    Jinja2文档地址：http://Jinja.pocoo.org/
+
+    2.模板的配置
+    　默认情况下，Flask会到项目中找到一个templates的文件夹，去搜索要用到的模板．
+
+    3.显示模板
+        1.作用
+        在视图中，将模板文件(xx.html)先渲染成字符串，再将字符串响应给客户端
+
+        2.函数
+        from flask import render_template
+
+        return render_templat e('模板名称.html')
+
+    4.模板中的语法规范(重点)
+        1.变量
+        　在模板中，变量是一种占位符，告诉模板该位置的值是从哪个数据中读取出来的．
+
+          语法
+            在视图中对变量的处理：
+            渲染模板时，要指定带到模板上的变量们
+            retuen render_template('xxx.html',变量1=值1...)
+
+        2.在模板中显示变量的值
+			语法: {{变量名}}
+			作用:将变量名对应的值输出在指定的位置处
+
+        2.过滤器
+            作用：允许在变量输出之前改变变量的值
+            语法：
+            {{变量|过滤器(参数)}}
+            过滤器名         说明
+            1.trim          去掉字符串两端的空格
+            2.default       如果变量为空，则使用default的参数值做显示
+            3.truncate      如果字符串超出指定长度的话则截取字符串，后面显示...
+
+        3.标签
+            作用：每个标签表示的是服务器端一段独立的功能
+            语法：
+            {% 标签内容 %}
+            {% 结束标签 %} (结束标签要根据需求灵活选择)
+
+            常用标签：
+            1.if标签
+            　基本标签：{% if 条件 %}
+                        允许写动态或静态的内容
+                    {% endif %}
+
+            2.if .. else 结构
+             {% if 条件 %}
+                满足条件时要执行的内容
+             {% else %}
+                不满足条件时要执行的内容
+             {% endif %}
+
+            3.if .. elif .. else
+             　{% if 条件1 %}
+             　{% elif 条件2 %}
+             　{% else %}
+             　{% endif %}
+
+            4.for标签
+            　{% for 变量 in 可迭代元素 %}
+              　  变量是服务器端内容
+            　{% endfor %}
+            　
+            　内部变量 - loop
+                作用：无需声明，直接使用；表示本次循环中的一些相关信息．
+                常用属性         作用
+                1.loop.index    表示当前循环的次数，从1开始记录
+                2.loop.index0   表示当前循环的次数，从0开始记录
+                3.loop.first    表示是否为第一次循环
+                4.loop.last    表示是否为最后一次循环，值为True,确认是最后一次循环
+
+        4.静态文件
+            不与服务器做动态交互的文件，一律都是静态文件．
+            静态文件的处理：
+                在项目中创建一个 static 文件夹，为了存放所有的静态文件．
+                所有的静态文件访问，必须通过 /static/ 访问．
+                    /static:表示 static 后的子路经将到 static 文件夹中继续搜索
+    练习：
+    1.创建一个Flask项目 - Blog
+    2.创建 templates 和 static 两个目录
+        1.将所有的html文件copy到templates中
+        2.将所有的静态文件copy到static中
+        3.处理模板中所有的静态文件
+            1.index.html
+            2.list.html
+    3.创建路由
+        1./
+        渲染index.html到浏览器上
+        2./list
+        渲染list.html到浏览器上
+
+        5.模板的继承
+            模板的继承类似于类的继承
+            如果一个模板中的内容大部分与另一个模板一样的时候，则可以使用继承的方式简化模板的的开发．
+
+            语法：
+                1.在父模板文件中
+                    需要定义出在子模板中可以被重写的内容
+                    标签：{% block 块名 %}
+                       　{% endblock %}
+                    block:
+                        1.在父模板中正常显示，没有任何影响
+                        2.在子模板中可以被重写
+                2.在子模板文件中
+                    1.需要指定继承自哪个父模板
+                      {% extends '父模板名称''%}
+                    2.重写父模板中指定的内容
+                      {% block 块名 %}
+                        此处编写的内容会覆盖掉父模板中的同名block的内容
+                      {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

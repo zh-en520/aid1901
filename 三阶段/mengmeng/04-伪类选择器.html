@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>Document</title>
+        <style>
+            /*
+           a:link{
+               color:black;
+           }
+           a:visited{
+               color:yellow;
+           }
+           a:hover{
+               background:orange;
+           }
+           a:active{
+               font-size:24px;
+           }
+           */
+           a{
+               color:black;
+               font-size:20px;
+               /*取消超链接默认下划线*/
+               text-decoration:none;
+           }
+           a:hover{
+               background:orange;
+           }
+           div{
+               width:200px;
+               height:200px;
+               background:red;
+           }
+           div:hover{
+            background:orange;
+            font-size:20px;
+           }
+           input:focus{
+               /*取消轮廓线*/
+               outline: none;
+           }
+        </style>
+    </head>
+    <body>
+        <a href='#'>超链接</a>
+        <div>
+            <div>你好</div>
+        </div>
+        <input type='text'>
+    </body>
+</html>

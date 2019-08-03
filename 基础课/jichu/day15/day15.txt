@@ -1,0 +1,158 @@
+生成器Generator
+什么是生成器：
+　生成器是能够动态提供数据的可迭代对象
+　生成器是在程序运行时生成数据，与容器类不同，它通常不会在内存中保存大量的数据，而是现用现生成
+生成器有两种：
+　生成器函数
+　生成器表达式
+
+生成器函数：
+　含有yield语句的函数是生成器函数，此函数被调用将返回一个生成器对象
+　yield翻译为(产生或生成)
+yield　语句：
+　语法：
+　yield表达式
+　说明：
+　yield只能用于def函数中，目的是将此函数作为生成器函数使用
+　yield用来生成数据，供迭代器的next(it)函数使用
+示例见：
+myyield.py
+
+生成器表达式：
+　语法：
+　(表达式　for 变量 in 可迭代对象 [if 真值表达式])
+　说明：
+　if 子句部分可以省略
+　作用：
+　用推导式形式创建一个新的生成器
+ 示例：
+gen = (x**2 for x in range(1,5))
+it = iter(gen)
+next(it)  #1
+next(it)  #4
+next(it)  #9
+next(it)  #16
+next(it)  # StopIteration
+　说明：
+生成器函数或生成器表达式调用后返回的生成器，既是生成器又是迭代器．
+　示例：
+gen = (x**2 for x in range(3))
+it = it0er(gen)
+next(it)
+next(gen)
+next(it)
+next(gen)
+
+迭代工具函数
+zip(iter1[,iter2[,iter3,...]])返回一个zip生成器对象，
+　　　　　此对象用于生成一个元组，此元组的数据分别来自于参数中的每个可迭代对象，
+　　　　　生成元组的个数由最小的可迭代对象大小决定
+示例：
+numbers = [10086,10000,10010,95588]
+names = ['中国移动','中国电信','中国联通']
+for t in zip(numbers,names):
+    print(t)
+
+用生成器函数实现myzip函数来代替zip函数，示例见：
+　myzip.py
+
+enumerate 函数：
+　函数格式：
+enumerate(iterable,start=0)
+　作用：
+生成一个枚举可迭代对象，此可迭代对象生成类型为(索引，值)的元组，默认索引从－开始，也可以用start指定
+　示例：
+names = ['中国移动','中国电信','中国联通']
+for t in enumerate(names):
+    print(t) #(0,'中国移动'),(1,'中国电信'),(...)
+
+
+
+字符串和字节数据
+序列：有序排列的一种容器
+　字符串str  列表list  元组tuple  字节串bytes  字节数组bytearray
+
+字节串bytes(也叫字节序列)
+ 作用:
+存储以字节为单位的数据
+ 说明：
+字节串是被不可以改变的序列
+字节是0~255之间的整数，用来表示一个字节的取值
+
+ 字节：
+字节(byte)是以8个位(bit)为单位的存储单元
+ 创建空字节串的字面值：
+b''
+b""
+b''' '''
+b""" """
+ 创建非空字节串面值：
+b'ABCD'
+b"ABCD"
+b'\x41\x42\x43\x44'
+ 字节串的构造函数：
+bytes()  生成一个空的字节串，等同于B''
+bytes(整数可迭代对象)　用可迭代对象初始化一个字符串
+bytes(整数n)　　生成n个值为0的字节串
+bytes(字符串,encode='utf-8's)　用字符串的转换编码生成一个字节串
+
+ 示例：
+Ｂ＝bytes() #B = b''
+Ｂ＝bytes(range(65,80)) #B = b'ABCDEF..'
+Ｂ＝bytes(10) #B = b'\x00\x00\x00...'
+Ｂ＝bytes('tarena','utf-8') #B = b'tarena'
+
+
+ 字节串的运算：
+＋　　　＋＝　　　＋　　　＊＝
+＜　　　＜＝　　　＞　　　＝＝　　　！＝
+in ,not in 
+索引index和切片
+注：字符串为不可变模型，只能索引和切片取值，不能赋值
+ 示例：
+b = b'ABC'+b'123'  #b = 'ABC123'
+B = B'ABC' > N'AB'　#trur
+b == b'ABC'*3  #b = b'ABCABCABC'
+65 in b'ABC'#trur
+b = b'ABCDEFG'
+print(b[0])  #65
+print(b[::2] #b'ACRG'
+
+ 内建函数：
+len(x),max(x),min(x),sum(x),any(x),all(x)
+
+ bytes 和　str 的区别bytes 和　str 的区别：
+bytes存储字节(0~255的整数)
+str存储unicode字符(0~010FFFF的整数)
+
+ bytes 和　str 的转换：
+        编码(encode)
+    str---------->bytes
+        b = s.encode(encoding = 'utf-8')
+
+        解码(decode)
+    bytes--------->str
+        s = b.decode(encoding = 'utf-8')
+
+ 示例：
+s = 'hello中国＇
+b = s.encode() #等同于s.encode('utf-8')
+
+
+ 字节数组：
+可变的字节序列
+ 创建字节数组的构造函数　bytearray
+bytearray() 创建空的字节数组
+bytearray(整数n)　创建n个值为０的字节数组
+bytearray(整型可迭代对象)　用可迭代对象初始化一个字节数组
+bytearray(字符串,encoding = 'utf-8')  用字符串的转换编码生成一个字节数组
+
+ 运算符：
+＋　　＋＝　　＊　　＊＝
+＜   <=    >      >=   ==   !=
+in  not_in
+ 索引和切片：
+注：字节数组支持索引和切片赋值，规则同列表的索引和切片赋值规则
+ 字节数组的方法见：
+文档参见：
+　python_base_docs_html/bytearray.html

@@ -1,0 +1,371 @@
+回顾
+数据库:简单说是数据的仓库,但是数据仓库的英文是(database wilehouse),不能直接说是数据仓库,他是按照一定的理论模型进行数据存取的
+软硬件集合;
+数据库管理系统:专门用于数据管理的软件系统
+数据管理的三个阶段:
+人工管理-->文件管理-->数据库管理系统
+数据库的概念模型:(理论模型)
+层次模型;网状模型;(前两个不存在)
+关系模型:使用(二维表)关系表示数据/数据之间的联系
+非关系模型:不使用关系模型的模型,将关系放在树状模型中
+
+关系模型重要概念:
+关系:关系是规范的二维表(列不可再分,行的次序不重要)
+实体:现实中可以区分的事物
+元组:二维表中的一行(一个字段,一条记录),每个元组描述的是一个实体的信息
+属性:关系中的一列,记录的是实体的某个数据特征
+键:用于区分不同元组(实体)的一个或多个属性组合
+主键:二维表(关系)中从逻辑上唯一区分实体的依据,满足两个条件:非空/唯一
+
+MySQL服务器管理
+启动:/etc/init.d/mysql start
+停止:/etc/init.d/mysql stop
+查看状态:/etc/init.d/mysql status
+查看端口:netstat - an | grep 3306
+重启:/etc/init.d/mysql restart
+
+库管理:
+查看库:show databases
+进入/切换库:use 库名
+查看当前所在库:select database()
+创建库:create database 库名
+      [default charset=字符集];
+查看建库语句:show create datbase 库名;
+
+表管理:
+创建表:create table 表名(
+    字段1 类型(长度),
+    字段2 类型(长度),
+    ...
+);
+查看表结构:
+desc 表名
+查看建表语句:
+show create table 表名
+删除表:drop table 表名
+
+新增操作:
+新增:insert into 表名 values(a,b..);
+指定插入某些字段:
+insert into 表名('a','b'...) values(a,b..);
+指定插入多笔数据:
+insert into 表名('a','b'...) 
+values(a,b..)
+      (a,b..);
+
+查询:
+select * from 表名;
+select 'a','b' from 表名;
+select * from 表名 where 'a'=a and/or 'b'=b
+
+-------------------------------------------------------------------------
+
+正文:
+
+一.数据操作(续)
+
+    1.修改数据
+      -语法:
+       update 表名
+           set 字段1 = 值1,
+               字段2 = 值2,
+               ...
+           where 条件表达式;
+      -示例:
+      1.修改某个订单的状态
+        update orders
+        set status = 2
+        where order_id = '201801010001';
+      2.修改某个订单的金额/状态
+        update orders
+        set amt = amt - 20,
+            status = 2
+        where order_id = '201801010001';
+      3.注意事项
+       -修改一定要严格限制条件
+       -设置的值要和字段类型匹配
+       -如果没有匹配的数据,修改为0行
+
+    2.删除数据
+      -语法:
+       delete from 表名 where 条件表达式;
+      -示例:删除订单编号为201801010002的数据
+       delete from orders
+       where order_id = '201801010002';
+      -注意事项:
+       -条件进行严格限制
+       -真实项目中,删除之前必须做备份
+
+二.MySQL数据类型update orders
+    set order_id='201801010002'
+    where order_id='201801010003;
+    1.常见信息种类
+      -数值类型
+      -字符串
+      -日期/时间类型
+      -枚举类型:例如性别/状态/
+      -二进制类型:例如图像/音频/视频
+
+    2.数值类型
+      类型       大小         范围
+      TINYINT   1Byte       0,255
+                           -128~127
+      INT       4Bytes      0~2^32-1
+                           -2^31~2^31-1
+      BIGINT    8Bytes      0~2^64-1
+                           -2^63~2^63-1
+    
+      Decimal   可变        存储精确的浮点数
+     
+      -示例:数值类型示例
+       create table num_test1(
+           -- 显示3位宽度,无符号,左边0填充
+           card_type int(3) unsigned zerofill,
+           dist_rate decimal(10,2)
+       );
+       insert into num_test values(1,0.88);
+       insert into num_test values(2,123.456);
+       insert into num_test values(3,2);
+       insert into num_test values(1000,3.444);
+
+      说明:
+      -当字段使用unsigned修饰时,字段值只能是正数或0;
+      -正数定义时的长度,仅仅是显示宽度,而不是存储的大小,存储大小由数据类型决定
+      -当使用zerofill时,数值左边会以0填充
+      -数值超过该类型的最大值,报错
+      -浮点数小数部分超过指定位数,浮点部分做四舍五入
+      -整数插入浮点数字段,自动转换为浮点数
+
+    3.字符串类型
+
+      -定长字符串:CHAR
+       -最大存储255个字符;
+       -如果实际内容不足指定长度,右边填充空格;
+       -如果不指定长度,默认长度为1;
+       -超过最大长度,无法存入;
+
+      -变长字符串:VARCHAR
+       -最大可存储65535个字符;
+       -按实际大小分配存储空间;
+       -超过指定最大长度,无法存入;
+
+      -大文本类型:TEXT
+       -存储内容大于65535字节时使用;
+
+      -CHAR 和 VARCHAR 的比较
+        -CHAR浪费存储空间,VARCHAR节约空间;
+        -CHAR性能高些,VARCHAR性能低些,差距可忽略不计;
+        *推荐使用VARCHAR
+
+    4.枚举类型
+      -两种类型
+        -ENUM:从给定值中选择一个
+        -SET:从给定值中选择多个
+      -示例:
+       create table enum_test(
+           name varchar(32),
+           sex enum('boy','girl'),
+           course set('music','dance','paint')
+       );
+       1.
+       insert into enum_test
+       values('Jerry','girl','music,dance');
+       2.
+       insert into enum_test
+       values('Tom','boy','music');
+       ---插入枚举之外的值,报错!
+       3.
+       insert into enum_test
+       values('Dekie','boy','music,football');
+
+    5.日期时间类型
+    select+类型:
+        now()
+        curdate
+        curtime
+        sysdate
+        sleep
+        month(now())
+        time(now())
+        day(now())
+        date(now())
+
+三.更多查询
+    1.运算符
+    -比较运算符:>,<,>=,<=,=,<>或!=
+       -示例1:
+        查询订单金额大于200的数据
+        select * from orders
+        where amt > 200;
+       -示例2:
+        查询状态不等于2的订单
+        select * from orders
+        where status != 2;
+    -逻辑运算符
+       -and:多个条件同时满足;等同于between..and..
+       -or:满足多个条件中的一个;等同于in /not in 
+
+       -练习1:查出订单金额200~400之间的数据,包含200和400
+       select * from orderupdate orders
+        set order_id='201801010002'
+        where order_id='201801010003;
+       where amt>=200 and update orders
+        set order_id='201801010002'
+        where order_id='201801010003;amt<=400;
+    update orders
+        set order_id='201801010002'
+        where order_id='201801010003;
+       -练习2:查询客户C000update orders
+        set order_id='201801010002'
+        where order_id='201801010003;1,C0002的客户编号,他们所下的订单
+       select * from orderupdate orders
+        set order_id='201801010002'
+        where order_id='201801010003;s
+       where cust_id = 'C0update orders
+        set order_id='201801010002'
+        where order_id='201801010003;001' or cust_id = 'C0002';
+
+       -练习3:查询客户C0001,C0003的客户编号,他们所下的状态为1的订单
+       select * from orders
+       where (cust_id = 'C0001' or cust_id = 'C0003') and status = 2;
+
+    -范围比较
+       -between...and...:在...与...之间
+       -in/not in:在/不在某个集合内
+
+       -示例1:查出订单金额200~400之间的数据,包含200和400
+        select * from orders
+        where amt between 200 and 400;
+
+       -示例2:查询客户C0001,C0003的客户编号,他们所下的订单
+        select * from orders
+        where cust_id in('C0001','C0003');
+
+    -模糊查询
+      -格式:where 字段名 like '通配字串';
+      -通配字串规则
+       下划线(_):匹配一个字符;
+       百分号(%):匹配任意多个字符;
+
+       -示例:新建一个表格
+        create table customer(
+            cust_id varchar(32),
+            cust_name varchar(32),
+            tel_no varchar(32)
+        ) default charset=utf8;
+
+        插入多行数据:
+        insert into customer values
+        ('C0001','Jerry','13811223344'),
+        ('C0002','Dekie','13844446666'),
+        ('C0003','Raary','13877778888');
+
+        --模糊查询,查询客户名称以D开头的信息
+        select * from customer
+        where cust_name like 'D%';
+
+        --模糊查询,查询客户名称有e的信息
+        select * from customer
+        where cust_name like '%y%';
+
+    -空值查询
+      -判断空:is null
+      -非空判断:is not null
+
+      -示例:查询状态为空的订单
+       select * from orders
+       where status is null;
+    
+    2.查询子句
+    -order by 子句
+       -作用:对查询结果进行排序
+       -格式:order by 排序字段 [ASC|DESC]
+             ASC:升序(默认排序方式)
+             DESC:降序
+    
+       -示例:查询所有订单信息,按照金额降序排列
+       select *from orders
+       order by amt desc;
+
+    -limit子句
+      -作用:限定查询结果显示的笔数
+      -格式:
+      limit n       限定显示前n笔
+      limit m,n     从第m笔显示,共显示n笔
+    
+      -示例1:查外和热两笔
+       select *外和热
+       order by外和热
+       limit 2;外和热
+    
+      -示例2 
+      -应用:利用limit m,n这种格式实现分页查询
+       原理:通过当前第几页/每页显示多少笔这两个数据,来算出limit m,n中的两个数字
+       m = (当前页码 -1)*每页笔数
+       n = 每页显示多少笔
+       insert into orders(order_id,cust_id)
+       values('201801010006','C0006'), 
+       ('201801010007','C0007'), 
+       ('201801010008','C0008'), 
+       ('201801010009','C0009'), 
+       ('201801010010','C0010');
+    
+       第一页:
+       select order_id,cust_id
+       from orders limit 0,3;
+       第二页:limit 3,3;
+       第三页:limut 6,3;
+
+    -distinct 去重
+      -作用:对某个字段值去重;
+      -格式:
+       select distinct(字段名) from 表名;
+      -示例:查询订单表一共有几种订单状态
+       select distinct(status) from orders;
+
+    3.聚合函数
+      -什么是聚合:不需要返回表中具体数据,而是对数据进行总结,将结果返回
+      -有哪些聚合函数
+       max:求某列最大值
+       select max(amt) from orders;
+       min:求某列最小值
+       select min(amt) from orders;
+       avg:求某列的平均值
+       select avg(amt) from orders;
+       sum:求某列的和
+       select sum(amt) from orders;
+       count:统计记录笔数
+       select count(*) from orders;
+
+    4.Group by子句
+      -作用:对查询结果进行分组,通常和聚合函数配合使用
+      -格式:group by 分组字段
+
+      -示例1:统计各种状态订单数量
+       select status,count(*) from orders
+       group by status;
+       --根据哪个字段分组,select后面一定要把该字段先查出来
+
+      -示例2:统计各种订单状态的最大金额
+      select status,max(amt) from orders
+      group by status;
+      如何去掉空值?
+
+    5.Having子句
+      -作用:对分组聚合结果进行筛选,需要和group by子句配合使用
+      -格式:group by 分组字段 having 过滤条件
+
+      -示例1:统计各种订单状态的订单数量,不显示状态为NULL的订单
+      select status,max(amt) from orders
+      --where amt>=0
+      group by status 
+      having status is not null;-- 过滤掉null
+
+      -SQL语句执行过程
+      第一步:首先执行from语句,找到源数据;
+      第二步:执行where子句,选出所有满足条件的数据;
+      第三步:group by子句进行分组;
+      第四步:执行聚合;
+      第五步:having子句对聚合结果过滤;
+      第六步:order by 子句对结果进行排序;
+      第七步:limit子句限制显示笔数;
